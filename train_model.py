@@ -122,15 +122,7 @@ class MNIST_PAQ:
 				client += 1
 				clients.set_description(str({"Epoch":epoch+1,"Loss": round(running_loss/client, 5)}))
 				clients.refresh()
-			if epoch == 0:
-				aggregate_weights = self.average_weights(all_weights)
-			temp_weights = []
-			print(type(aggregate_weights))
-			for i in all_weights:
-				z = torch.sub(aggregate_weights,i)
-				z = quantize(z,1)
-				temp_weights.append(z)
-			aggregate_weights = self.average_weights(temp_weights)
+			aggregate_weights = self.average_weights(all_weights)
 			self.set_weights(aggregate_weights)
 			test_acc = self.test_aggregated_model(datasets_test['x'], datasets_test['y'], epoch)
 			print("Test Accuracy:", round(test_acc.item(), 5))
